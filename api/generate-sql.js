@@ -1,5 +1,5 @@
-import OpenAI from 'openai';
-import { createClient } from '@supabase/supabase-js';
+const OpenAI = require('openai').default;
+const { createClient } = require('@supabase/supabase-js');
 
 // Initialize OpenAI client for OpenRouter
 const openai = new OpenAI({
@@ -40,7 +40,7 @@ async function getDatabaseSchema() {
     }
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -107,4 +107,4 @@ export default async function handler(req, res) {
         console.error("OpenRouter Error:", error);
         res.status(500).json({ error: error.message });
     }
-}
+};

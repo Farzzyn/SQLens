@@ -1,11 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
+const { createClient } = require('@supabase/supabase-js');
 
 let supabase;
 if (process.env.SUPABASE_URL && process.env.SUPABASE_URL !== 'https://your-project-url.supabase.co') {
     supabase = createClient(process.env.SUPABASE_URL, process.env.VITE_SUPABASE_KEY);
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -48,4 +48,4 @@ export default async function handler(req, res) {
         console.error("Database Error:", error);
         res.status(500).json({ error: error.message });
     }
-}
+};
