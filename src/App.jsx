@@ -49,8 +49,14 @@ function App() {
         });
 
         if (!genRes.ok) {
-          const errData = await genRes.json();
-          throw new Error(errData.error || 'Failed to generate SQL');
+          const contentType = genRes.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errData = await genRes.json();
+            throw new Error(errData.error || 'Failed to generate SQL');
+          } else {
+            const text = await genRes.text();
+            throw new Error(`Server Error (${genRes.status}): ${text.slice(0, 100)}`);
+          }
         }
 
         const genData = await genRes.json();
@@ -76,8 +82,14 @@ function App() {
             setData(mockData); // Fallback
           }, 500);
         } else if (!execRes.ok) {
-          const errData = await execRes.json();
-          throw new Error(errData.error || 'Query execution failed');
+          const contentType = execRes.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errData = await execRes.json();
+            throw new Error(errData.error || 'Query execution failed');
+          } else {
+            const text = await execRes.text();
+            throw new Error(`Execution Error (${execRes.status}): ${text.slice(0, 100)}`);
+          }
         } else {
           const resultData = await execRes.json();
           const result = resultData.data;

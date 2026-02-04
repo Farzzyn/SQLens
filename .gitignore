@@ -26,3 +26,7 @@ npm-debug.log*
 
 # Misc
 .cache/
+
+# Test files
+test_*.js
+error.log
