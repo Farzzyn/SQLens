@@ -73,12 +73,12 @@ module.exports = async function handler(req, res) {
       Rules:
       1. Return ONLY a JSON object with two fields: "sql" (the SQL query string) and "explanation" (a brief 1-sentence explanation).
       2. Do NOT use markdown formatting (no \`\`\`).
-      3. Use PostgreSQL syntax ONLY. Do NOT use backticks (\`) - use double quotes (") for identifiers if needed, or preferably use lowercase unquoted identifiers.
+      3. Use PostgreSQL syntax ONLY. CRITICAL: Always wrap table names and column names in double quotes (") to handle special characters and spaces.
       4. If the user asks for dangerous operations (DROP, DELETE, UPDATE), return an error message in the explanation and set sql to null.
       5. Default to read-only queries (SELECT statements only).
       6. CRITICAL: Only query tables that exist in the provided schema. Do NOT make up table names.
       7. If no schema is provided, or if the user's question is unclear, set sql to null and provide a helpful explanation asking for clarification.
-      8. Table and column names should be lowercase and unquoted unless they contain special characters.
+      8. ALWAYS use double quotes around ALL table and column names, even if they appear simple. Example: SELECT "column_name" FROM "table_name"
       
       Context/Schema:
       ${activeSchema || "No database schema available. Please ask the user which tables they want to query, or suggest they run a query to list all tables using: SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"}
