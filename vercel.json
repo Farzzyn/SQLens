@@ -18,10 +18,5 @@
             "src": "/(.*)",
             "dest": "/$1"
         }
-    ],
-    "env": {
-        "VITE_SUPABASE_KEY": "@vite_supabase_key",
-        "OPENROUTER_API_KEY": "@openrouter_api_key",
-        "SUPABASE_URL": "@supabase_url"
-    }
+    ]
 }
