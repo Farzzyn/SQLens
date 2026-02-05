@@ -75,11 +75,12 @@ app.post('/api/generate-sql', async (req, res) => {
       4. If the user asks for dangerous operations (DROP, DELETE, UPDATE), return an error message in the explanation and set sql to null.
       5. Default to read-only queries (SELECT statements only).
       6. CRITICAL: Only query tables that exist in the provided schema. Do NOT make up table names.
-      7. If no schema is provided, or if the user's question is unclear, set sql to null and provide a helpful explanation asking for clarification.
+      7. BE PROACTIVE: Always try to generate a useful SQL query based on the user's intent and the available schema. Interpret vague requests generously - if the user mentions something like "bad sales" or "low performers", create a query that finds relevant data (e.g., lowest values, below average, bottom N records). Only set sql to null if absolutely no relevant query can be constructed.
       8. ALWAYS use double quotes around ALL table and column names, even if they appear simple. Example: SELECT "column_name" FROM "table_name"
+      9. When the user's request is ambiguous, make reasonable assumptions and explain them in the explanation field. For example, "bad sales person" could mean lowest sales, so query for records with lowest sales values.
       
       Context/Schema:
-      ${activeSchema || "No database schema available. Please ask the user which tables they want to query, or suggest they run a query to list all tables using: SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"}
+      ${activeSchema || "No database schema available. Generate a query to list all tables: SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"}
     `;
 
         const completion = await openai.chat.completions.create({
